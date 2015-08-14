@@ -16,6 +16,7 @@ namespace GraphicExample
         private Generator mGen;
         private CurrentState mState;
         private Stack<CurrentState> executionStack;
+        private Point targetLocation;
 
         public Form1()
         {
@@ -32,10 +33,22 @@ namespace GraphicExample
             mGen.AddAction(']', popFromStack);
 
             mState = new CurrentState();
-            mState.currentLocation = new Point(256, 512);
+            mState.currentLocation = new Point(256, 256);
             mState.currentAngle = 90.0f;
 
+            targetLocation = mState.currentLocation;
+
             executionStack = new Stack<CurrentState>();
+
+            mDrawingPanel.Paint += mDrawingPanel_Paint;
+        }
+
+        private void mDrawingPanel_Paint(object sender, PaintEventArgs e)
+        {
+            Graphics gfx = e.Graphics;
+            Pen drawingPen = new Pen(Color.Black);
+
+            gfx.DrawLine(drawingPen, mState.currentLocation, targetLocation);
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -49,9 +62,10 @@ namespace GraphicExample
             double currentAngleRad = (180.0 * Math.PI) * mState.currentAngle;
             int newX = mState.currentLocation.X + (int)(10.0 * Math.Cos(currentAngleRad));
             int newY = mState.currentLocation.Y + (int)(10.0 * Math.Sin(currentAngleRad));
-            Point targetLocation = new Point(newX,newY);
-            
-            draw(targetLocation);
+            targetLocation = new Point(newX,newY);
+
+            mDrawingPanel.Refresh();
+
             mState.currentLocation = targetLocation;
         }
 
@@ -73,14 +87,6 @@ namespace GraphicExample
         private void popFromStack()
         {
             mState = executionStack.Pop();
-        }
-
-        private void draw(Point targetLocation)
-        {
-            Graphics gfx = mDrawingPanel.CreateGraphics();
-            Pen drawingPen = new Pen(Color.Black);
-
-            gfx.DrawLine(drawingPen,mState.currentLocation,targetLocation);
         }
     }
 
