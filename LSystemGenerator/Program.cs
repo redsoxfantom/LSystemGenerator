@@ -14,8 +14,20 @@ namespace LSystemGenerator
             Generator gen = new Generator();
             gen.AddRule('A',"AB");
             gen.AddRule('B', "BA");
+            gen.AddAction('A',()=>{
+                Console.WriteLine("Visited A");
+            });
+            gen.AddAction('B', () =>
+            {
+                Console.WriteLine("Visited B");
+            });
 
-            Console.WriteLine(gen.GenerateSystem(10,"A"));
+            string generatedSystem = gen.GenerateSystem(3,"A");
+            Console.WriteLine("Generated System: " + generatedSystem);
+
+            gen.TraverseSystem(generatedSystem);
+
+
             Console.ReadKey();
         }
     }
