@@ -17,6 +17,7 @@ namespace GraphicExample
         private CurrentState mState;
         private Stack<CurrentState> executionStack;
         private Point targetLocation;
+        private double stepLength = 25.0;
 
         public Form1()
         {
@@ -59,9 +60,9 @@ namespace GraphicExample
 
         private void moveForward()
         {
-            double currentAngleRad = (180.0 * Math.PI) * mState.currentAngle;
-            int newX = mState.currentLocation.X + (int)(10.0 * Math.Cos(currentAngleRad));
-            int newY = mState.currentLocation.Y + (int)(10.0 * Math.Sin(currentAngleRad));
+            double currentAngleRad = (Math.PI / 180.0) * mState.currentAngle;
+            int newX = mState.currentLocation.X + (int)(stepLength * Math.Cos(currentAngleRad));
+            int newY = mState.currentLocation.Y + (int)(stepLength * Math.Sin(currentAngleRad));
             targetLocation = new Point(newX,newY);
 
             mDrawingPanel.Refresh();
