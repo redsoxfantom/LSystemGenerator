@@ -8,7 +8,10 @@ namespace LSystemGenerator.LSystemGen
 {
     public class Generator
     {
+        public delegate void NodeVisitor();
+
         private Dictionary<char, string> mRules;
+        private Dictionary<char, NodeVisitor> mActions;
 
         public Generator()
         {
@@ -18,6 +21,11 @@ namespace LSystemGenerator.LSystemGen
         public void AddRule(char ruleName, string ruleOutput)
         {
             mRules.Add(ruleName, ruleOutput);
+        }
+
+        public void AddAction(char nodeName, NodeVisitor actionToPerform)
+        {
+
         }
 
         public string GenerateSystem(int numIters, string input)
