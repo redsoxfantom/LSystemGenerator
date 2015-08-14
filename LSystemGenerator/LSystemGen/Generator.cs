@@ -16,6 +16,7 @@ namespace LSystemGenerator.LSystemGen
         public Generator()
         {
             mRules = new Dictionary<char, string>();
+            mActions = new Dictionary<char, NodeVisitor>();
         }
         
         public void AddRule(char ruleName, string ruleOutput)
@@ -25,7 +26,7 @@ namespace LSystemGenerator.LSystemGen
 
         public void AddAction(char nodeName, NodeVisitor actionToPerform)
         {
-
+            mActions.Add(nodeName, actionToPerform);
         }
 
         public string GenerateSystem(int numIters, string input)
@@ -51,6 +52,17 @@ namespace LSystemGenerator.LSystemGen
             }
 
             return output.ToString();
+        }
+
+        public void TraverseSystem(string generatedSystem)
+        {
+            foreach(char node in generatedSystem)
+            {
+                if(mActions.ContainsKey(node))
+                {
+                    mActions[node]();
+                }
+            }
         }
     }
 }
