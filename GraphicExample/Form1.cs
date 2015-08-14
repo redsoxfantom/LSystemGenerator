@@ -27,6 +27,7 @@ namespace GraphicExample
             mGen = new Generator();
             mGen.AddRule('X', "F-[[X]+X]+F[+FX]-X");
             mGen.AddRule('F', "FF");
+            //mGen.AddRule('X', "+F-F[FF]+FF");
 
             mGen.AddAction('F', moveForward);
             mGen.AddAction('+', turnLeft);
@@ -35,7 +36,7 @@ namespace GraphicExample
             mGen.AddAction(']', popFromStack);
 
             mState = new CurrentState();
-            mState.currentLocation = new Point(256, 256);
+            mState.currentLocation = new Point(256, 512);
             mState.currentAngle = 90.0f;
 
             targetLocation = mState.currentLocation;
@@ -66,27 +67,29 @@ namespace GraphicExample
         private void moveForward()
         {
             double currentAngleRad = (Math.PI / 180.0) * mState.currentAngle;
-            int newX = mState.currentLocation.X + (int)(stepLength * Math.Cos(currentAngleRad));
-            int newY = mState.currentLocation.Y + (int)(stepLength * Math.Sin(currentAngleRad));
+            int newX = mState.currentLocation.X - (int)(stepLength * Math.Cos(currentAngleRad));
+            int newY = mState.currentLocation.Y - (int)(stepLength * Math.Sin(currentAngleRad));
             targetLocation = new Point(newX,newY);
-
-
+            mDrawingPanel.Refresh();
             mState.currentLocation = targetLocation;
         }
 
         private void turnLeft()
         {
-            mState.currentAngle += 15.0f;
+            mState.currentAngle -= 15.0f;
         }
 
         private void turnRight()
         {
-            mState.currentAngle -= 15.0f;
+            mState.currentAngle += 15.0f;
         }
 
         private void pushToStack()
         {
-            executionStack.Push(mState);
+            CurrentState stateToPush = new CurrentState();
+            stateToPush.currentAngle = mState.currentAngle;
+            stateToPush.currentLocation = new Point(mState.currentLocation.X, mState.currentLocation.Y);
+            executionStack.Push(stateToPush);
         }
 
         private void popFromStack()
