@@ -46,7 +46,10 @@ namespace GraphicExample
 
         private void moveForward()
         {
-            Point targetLocation = new Point();
+            double currentAngleRad = (180.0 * Math.PI) * mState.currentAngle;
+            int newX = mState.currentLocation.X + (int)(10.0 * Math.Cos(currentAngleRad));
+            int newY = mState.currentLocation.Y + (int)(10.0 * Math.Sin(currentAngleRad));
+            Point targetLocation = new Point(newX,newY);
             
             draw(targetLocation);
             mState.currentLocation = targetLocation;
