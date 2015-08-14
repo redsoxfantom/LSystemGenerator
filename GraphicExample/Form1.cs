@@ -18,6 +18,7 @@ namespace GraphicExample
         private Stack<CurrentState> executionStack;
         private Point targetLocation;
         private double stepLength = 25.0;
+        Bitmap drawingBitmap;
 
         public Form1()
         {
@@ -41,15 +42,19 @@ namespace GraphicExample
 
             executionStack = new Stack<CurrentState>();
 
+            drawingBitmap = new Bitmap(mDrawingPanel.Width, mDrawingPanel.Height);
+
             mDrawingPanel.Paint += mDrawingPanel_Paint;
         }
 
         private void mDrawingPanel_Paint(object sender, PaintEventArgs e)
         {
-            Graphics gfx = e.Graphics;
-            Pen drawingPen = new Pen(Color.Black);
-
-            gfx.DrawLine(drawingPen, mState.currentLocation, targetLocation);
+            using (Graphics gfx = Graphics.FromImage(drawingBitmap))
+            {
+                Pen drawingPen = new Pen(Color.Black);
+                gfx.DrawLine(drawingPen, mState.currentLocation, targetLocation);
+            }
+            e.Graphics.DrawImage(drawingBitmap, new Point(0, 0));
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -65,7 +70,6 @@ namespace GraphicExample
             int newY = mState.currentLocation.Y + (int)(stepLength * Math.Sin(currentAngleRad));
             targetLocation = new Point(newX,newY);
 
-            mDrawingPanel.Refresh();
 
             mState.currentLocation = targetLocation;
         }
