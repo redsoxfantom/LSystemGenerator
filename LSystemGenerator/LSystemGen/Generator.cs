@@ -9,6 +9,7 @@ namespace LSystemGenerator.LSystemGen
     public class Generator
     {
         public delegate void NodeVisitor();
+        public event Action TraversalComplete;
 
         private Dictionary<char, string> mRules;
         private Dictionary<char, NodeVisitor> mActions;
@@ -62,6 +63,11 @@ namespace LSystemGenerator.LSystemGen
                 {
                     mActions[node]();
                 }
+            }
+
+            if(TraversalComplete != null)
+            {
+                TraversalComplete();
             }
         }
     }
